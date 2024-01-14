@@ -2,6 +2,8 @@ PDP-11 RL01/RL02 bare metal ekermit server. This project was created as a way to
 
 The E-Kermit (Embedded Kermit) package from Columbia University and authored by Frank da Cruz is the foundation of this code. All the PDP-11 hardware support software was added to run as a bare metal program. The result of this build is the "ek" binary and the matching ek.ptap (paper tape) version. The SIMH PDP-11 simulator v4.0 was used for testing and a "pdp11.ini" example file will load the ek.ptap file. The rawRL02.dsk file was used for testing and is included. 
 
+Ek will require a console serial port, RL disk controller, enough memory for the ek program to fit, and also expects a working 50/60hz clock. Each device is expected at the default address and vector.
+
 Develment environment:
 
 This code was compiled using GCC version 9.3.0 configured for the PDP-11.
