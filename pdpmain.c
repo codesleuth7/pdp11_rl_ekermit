@@ -124,7 +124,7 @@ if( rcv_in != rcv_out ) {
    cons_puts("rcv_in: ");cons_hex((char*)&rcv_in,2,0);
    cons_puts("rcv_out: ");cons_hex((char*)&rcv_out,2,0);
 }
-#endif
+#endif /* DBG1 */
    return;
 }
 
@@ -143,7 +143,7 @@ short fmode = -1;                       /* Transfer mode for this file */
 int parity = 1;                         /* Parity */
 #ifdef F_CRC
 int check = 3;                          /* Block check */
-#else
+#else /* F_CRC */
 int check = 1;
 #endif /* F_CRC */
 int remote = 1;                         /* 1 = Remote, 0 = Local */
@@ -188,7 +188,7 @@ cons_num(char *msg,unsigned int x)
       n += 0x30; // Add "0"
       cons_putc((char)n);
    }
-#endif
+#endif /* PNTBIN */
    cons_puts("  0x");
    for(i=12,c=0;i>=0;i-=4) {
       unsigned int n;
@@ -233,7 +233,7 @@ cons_lnum(char *msg,unsigned long x)
       n += 0x30; // Add "0"
       cons_putc((char)n);
    }
-#endif
+#endif /* PNTBIN */
    cons_puts("  0x");
    for(i=28,c=0;i>=0;i-=4) {
       long int n;
@@ -382,7 +382,7 @@ while( (x=rl_fread(frbuf,256)) ) {
    cons_puts("CMD> ");
    cons_gets(mbuf,MBSZ);
    cons_puts("<\n");
-#else
+#else /* NOCONSINTR */
    char c;
    xmtchr('C');
    xmtchr('M');
@@ -394,14 +394,14 @@ while( (x=rl_fread(frbuf,256)) ) {
       if( rcv_out >= RCVBSZ ) { rcv_out=0; }
       xmtchr(c);
    }
-#endif
+#endif /* NOCONSINTR */
 }
-#endif
+#endif /* WAIT */
 #ifdef DBG1
 cons_puts("Starting kermit loop after delay of 15sec\r");
 start_sec = cksec_cnt;
 while( cksec_cnt < ( start_sec+(unsigned long)15L ) );
-#endif
+#endif /* DBG1 */
     action = A_SEND; // This is the default, sending the image
 
 
@@ -451,7 +451,7 @@ while( 1 ) {
 
 #ifdef DBG1
 cons_puts("kermit(SEND) return\n");
-#endif
+#endif /* DBG1 */
 /*
   Now we read a packet ourselves and call Kermit with it.  Normally, Kermit
   would read its own packets, but in the embedded context, the device must be
@@ -494,7 +494,7 @@ cons_puts("kermit(SEND) return\n");
 
 #ifdef DBG1
 cons_puts("kermit(RUN) Starting\n");
-#endif
+#endif /* DBG1 */
         switch (status = kermit(K_RUN, &k, r_slot, rx_len, "", &r)) {
 	  case X_OK:
 	    /* Maybe do other brief tasks here... */
@@ -686,4 +686,3 @@ cons_puts("kermit(RUN) Starting\n");
  }
 #endif // OLDCODE
 }
-
