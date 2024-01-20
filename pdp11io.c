@@ -561,11 +561,18 @@ fileinfo(struct k_data * k,
     *ocp++ = 0; // NULL at end!
     *type = 1; // Always binary
     if( rlst_ptr->mp_status & RL_MP_STA_DT ) { // Drive Type 0=RL01 1=RL02
-       //sz = (ULONG) 40*256*2*512; // RL02 40=sec, 256bytes/sec, 2=heads, 512=cyl
+#ifdef BINARYSAFE
+       sz = (ULONG) 40*256*2*512; // RL02 40=sec, 256bytes/sec, 2=heads, 512=cyl
+#else /* BINARYSAFE */
        sz = (ULONG) 13981016L; // Base64 size
+#endif /* BINARYSAFE */
     } else {
-       //sz = (ULONG) 40*256*2*256; // RL01
+#ifdef BINARYSAFE
+       sz = (ULONG) 40*256*2*256; // RL01
+#else /* BINARYSAFE */
        sz = (ULONG) 6990508L; // Base64 size
+#endif /* BINARYSAFE */
+
     }
 
 #ifdef DBG1
@@ -582,10 +589,14 @@ cons_hex((char*)&sz,4,0);
 // pdp11 division with long problem. We avoid this issue by knowing
 // the string values of the RL01 & RL02 but require access
 // to the type information
-//static char rl01len[] = "5242880"; // Normal binary RL01 size
-//static char rl02len[] = "10485760"; // Normal binary RL02 size
+#ifdef BINARYSAFE
+static char rl01len[] = "5242880"; // Normal binary RL01 size
+static char rl02len[] = "10485760"; // Normal binary RL02 size
+#else /* BINARYSAFE */
 static char rl01len[] = "6990508";
 static char rl02len[] = "13981016";
+#endif /* BINARYSAFE */
+
 STATIC UCHAR *                          /* Convert number to string */
 numstring(ULONG n, UCHAR * buf, int buflen, struct k_data * k) {
     int i, x;
