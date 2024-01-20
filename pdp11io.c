@@ -650,8 +650,13 @@ cons_puts("ReadFile rl_fread()\n");
 #ifdef OLDFREAD
 	k->zincnt = rl_fread(k->zinbuf, k->zinlen);
 #else // OLDFREAD
-	//k->zincnt = rl_sread(k->zinbuf, k->zinlen);
-	k->zincnt = base64_enc(k->zinbuf, k->zinlen);
+	    
+#ifdef BINARYSAFE
+        k->zincnt = rl_sread(k->zinbuf, k->zinlen);
+#else /* BINARYSAFE */
+        k->zincnt = base64_enc(k->zinbuf, k->zinlen);
+#endif /* BINARYSAFE */
+
 #endif // OLDFREAD
 #endif // DBG1
 
